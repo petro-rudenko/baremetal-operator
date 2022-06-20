@@ -31,6 +31,16 @@ func TestParse(t *testing.T) {
 		},
 
 		{
+			Scenario: "dpu url",
+			Address:  "dpu://192.168.122.1:6233/",
+			Type:     "dpu",
+			Port:     "6233",
+			Host:     "192.168.122.1",
+			Hostname: "192.168.122.1:6233",
+			Path:     "/",
+		},
+
+		{
 			Scenario: "ipmi default scheme and port",
 			Address:  "192.168.122.1",
 			Type:     "ipmi",
@@ -731,6 +741,20 @@ func TestDriverInfo(t *testing.T) {
 				"ipmi_address":    "192.168.122.1",
 				"ipmi_verify_ca":  false,
 				"ipmi_priv_level": "OPERATOR",
+			},
+		},
+		{
+			Scenario: "dpu driver",
+			input:    "dpu://192.168.122.1",
+			expects: map[string]interface{}{
+				"ipmi_port":                 ipmiDefaultPort,
+				"ipmi_password":             "",
+				"ipmi_username":             "",
+				"ipmi_address":              "192.168.122.1",
+				"ipmi_verify_ca":            false,
+				"ipmi_priv_level":           "ADMINISTRATOR",
+				"ipmi_disable_boot_timeout": false,
+				"ipmi_cipher_suite":         17,
 			},
 		},
 

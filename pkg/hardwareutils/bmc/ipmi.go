@@ -8,6 +8,7 @@ import (
 func init() {
 	RegisterFactory("ipmi", newIPMIAccessDetails, []string{})
 	RegisterFactory("libvirt", newIPMIAccessDetails, []string{})
+	RegisterFactory("dpu", newIPMIAccessDetails, []string{})
 }
 
 func getPrivilegeLevel(rawquery string) string {
@@ -59,6 +60,9 @@ func (a *ipmiAccessDetails) NeedsMAC() bool {
 }
 
 func (a *ipmiAccessDetails) Driver() string {
+	if a.bmcType == "dpu" {
+		return "dpu"
+	}
 	return "ipmi"
 }
 
@@ -86,6 +90,11 @@ func (a *ipmiAccessDetails) DriverInfo(bmcCreds Credentials) map[string]interfac
 	if a.portNum == "" {
 		result["ipmi_port"] = ipmiDefaultPort
 	}
+
+	if a.bmcType == "dpu" {
+		result["ipmi_disable_boot_timeout"] = false
+		result["ipmi_cipher_suite"] = 17
+	}
 	return result
 }
 
@@ -94,6 +103,9 @@ func (a *ipmiAccessDetails) BIOSInterface() string {
 }
 
 func (a *ipmiAccessDetails) BootInterface() string {
+	if a.bmcType == "dpu" {
+		return "pxe"
+	}
 	return "ipxe"
 }
 

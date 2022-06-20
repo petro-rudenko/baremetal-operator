@@ -152,7 +152,7 @@ func NewAccessDetails(address string, disableCertificateVerification bool) (Acce
 
 	factory, ok := factories[parsedURL.Scheme]
 	if !ok {
-		return nil, &UnknownBMCTypeError{address, parsedURL.Scheme}
+		return nil, &UnknownBMCTypeError{address, parsedURL.Scheme, factories}
 	}
 
 	return factory(parsedURL, disableCertificateVerification)

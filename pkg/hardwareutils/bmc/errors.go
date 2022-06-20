@@ -7,13 +7,14 @@ import (
 // UnknownBMCTypeError is returned when the provided BMC address cannot be
 // mapped to a driver.
 type UnknownBMCTypeError struct {
-	address string
-	bmcType string
+	address   string
+	bmcType   string
+	factories map[string]AccessDetailsFactory
 }
 
 func (e UnknownBMCTypeError) Error() string {
-	return fmt.Sprintf("Unknown BMC type '%s' for address %s",
-		e.bmcType, e.address)
+	return fmt.Sprintf("Unknown BMC type '%s' for address %s. Factories: %v ",
+		e.bmcType, e.address, e.factories)
 }
 
 // CredentialsValidationError is returned when the provided BMC credentials
